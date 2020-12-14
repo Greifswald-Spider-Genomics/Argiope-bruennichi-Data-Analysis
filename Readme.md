@@ -16,9 +16,9 @@ Documentation of Data Analysis in the Argiope bruennichi sequencing project
 ## Assembling using PacBio long-reads
 
 ```
-\# Step 1a - assemble with wtdbg2
+# Step 1a - assemble with wtdbg2
 wtdbg2 -x sq -t 30 -i pacbio_raw.fq -fo argiope_wtdbg2
-\# Step 1b - derive consensus
+# Step 1b - derive consensus
 wtpoa - cns -t 30 -i argiope_wtdbg2.ctg.lay.gz -fo argiope_wtdbg2.ctg.fa
 ```
 
