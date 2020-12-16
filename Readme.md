@@ -10,6 +10,11 @@ Documentation of Data Analysis in the Argiope bruennichi sequencing project
 
 # Data
 
+PacBio long-reads
+-----------------
+
+Paired-end Illumina short-reads
+-------------------------------
 
 # Assembly
 
