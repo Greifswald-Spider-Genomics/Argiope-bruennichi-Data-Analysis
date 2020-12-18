@@ -47,7 +47,7 @@ bwa mem -t 10 argiope_wtdbg2.ctg.fa PE_data_R1.fq.gz PE_data_R2.fq.gz | samtools
 # Step 2c - index the mapped file
 samtools index PE_data.sorted.bam
 # Step 2d - Polish the wtdbg2 FASTA with the Illumina data
-java -Xmx900G -jar pilon -1.23.jar --genome argiope_wtdbg2.ctg.fa --frags PE_data.sorted.bam --output argiope_wtdbg2_p1
+java -Xmx900G -jar pilon-1.23.jar --genome argiope_wtdbg2.ctg.fa --frags PE_data.sorted.bam --output argiope_wtdbg2_p1
 # Repeat steps 2a – 2d twice (the resulting FASTA file is named argiope_wtdbg2_p3.fa)
 ```
 The resulting assembly is also called contig assembly.
