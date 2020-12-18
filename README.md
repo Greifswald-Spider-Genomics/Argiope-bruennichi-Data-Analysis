@@ -50,7 +50,7 @@ samtools index PE_data.sorted.bam
 java -Xmx900G -jar pilon-1.23.jar --genome argiope_wtdbg2.ctg.fa --frags PE_data.sorted.bam --output argiope_wtdbg2_p1
 # Repeat steps 2a – 2d twice (the resulting FASTA file is named argiope_wtdbg2_p3.fa)
 ```
-The resulting assembly is also called contig assembly.
+The resulting assembly is also called "contig assembly".
 
 ## Scaffolding using Hi-C data
 
@@ -58,14 +58,15 @@ The polished assembly was scaffolded with HiRise <b id="f3">[3]</b> using Hi-C d
 
 This step was performed by Dovetail Genomics.
 
-The resulting assembly is the final assembly and is also called scaffolded assembly.
+The resulting assembly is the final assembly and is also called "scaffolded assembly".
 
 
 # Repeat Masking
 
 The assembly was repeat-masked using the *de novo* repeat finder RepeatModeler (v. open-1.0.11) <b id="f4">[4]</b> and the homology-based repeat finder RepeatMasker (v. open-4.0.8) <b id="f5">[5,6]</b>.
 
-First, RepeatModeler was used to generate a repeat library for the contig assembly. 
+First, RepeatModeler was used to generate a repeat library for the contig assembly. <br>
+Since RepeatModeler needs a database as input, this was created first using ```BuildDatabase``` with the options ```-name argiope``` to specify the database name and ```-engine ncbi``` to specify the used search engine. <br>
 RepeatModeler was run with the *de novo* repeat finder RECON (v. 1.08), the search engine RMBlast (v. 2.2.27), *de novo* prepeat finder RepeatScout (v. 1.0.5) and tandem repeat finder TRF (v. 4.0.9) with the options 
 ```
 # Repeat masking the contig assembly
