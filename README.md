@@ -70,7 +70,7 @@ Since RepeatModeler needs a database as input, this was created first using ```B
 RepeatModeler was run with the *de novo* repeat finder RECON (v. 1.08) <b id="f7">[7]</b>, the search engine RMBlast (v. 2.2.27), *de novo* prepeat finder RepeatScout (v. 1.0.5) <b id="f8">[8]</b> and tandem repeat finder TRF (v. 4.0.9) <b id="f9">[9]</b> with the options ```-database argiope``` to specify the database name and ```-engine ncbi``` to specify the used search engine.
 
 Then, RepeatMasker was used, to find and mask the repeats in the contig assembly as well as the scaffolded assembly using the previously generated repeat library.
-RepeatMasker was run with the RepeatMasker combined database Dfam_3.0 and the search engine RMBlast (v. 2.9.0) with the options ```-lib argiope-families.fa``` to include the previously generated repeat library, ```-s``` for using a slow search which is 0-5 % more sensitive bit 2-3 times slower than default search and ```-xsmall``` to generate a soft-masked assembly instead of hard-masked.
+RepeatMasker was run with the RepeatMasker combined database Dfam_3.0 and the search engine RMBlast (v. 2.9.0) with the options ```-lib argiope-families.fa``` to include the previously generated repeat library, ```-s``` for using a slow search which is 0-5 % more sensitive but 2-3 times slower than default search and ```-xsmall``` to generate a soft-masked assembly instead of hard-masked.
 
 Repeat masking was done by executing the following commands:
 
