@@ -63,7 +63,7 @@ The resulting assembly is the final assembly and is also called "scaffolded asse
 
 # Repeat Masking
 
-The assembly was repeat-masked using the *de novo* repeat finder RepeatModeler (v. open-1.0.11) <b id="f4">[4]</b> and the homology-based repeat finder RepeatMasker (v. open-4.0.8) <b id="f5">[5,6]</b>.
+The assembly was repeat-masked using the *de novo* repeat finder RepeatModeler (v. open-1.0.11) <b id="f4">[4]</b> and the homology-based repeat finder RepeatMasker (v. open-4.0.9) <b id="f5">[5,6]</b>.
 
 First, RepeatModeler was used to generate a repeat library for the contig assembly. <br>
 Since RepeatModeler needs a database as input, this was created first using ```BuildDatabase``` with the options ```-name argiope``` to specify the database name and ```-engine ncbi``` to specify the used search engine:
@@ -78,17 +78,16 @@ RepeatModeler was run with the *de novo* repeat finder RECON (v. 1.08) <b id="f7
 nohup RepeatModeler -engine ncbi -database argiope >& run.out &
 ```
 
-Then, RepeatMasker was used, to find and mask the repeats in the contig assembly as well as the scaffolded assembly using the previously generated repeat library.
+Then, RepeatMasker was used, to find and mask the repeats in the scaffolded assembly using the previously generated repeat library.
 RepeatMasker was run with the RepeatMasker combined database Dfam_3.0 and the search engine RMBlast (v. 2.9.0) with the options ```-lib argiope-families.fa``` to include the previously generated repeat library, ```-s``` for using a slow search which is 0-5 % more sensitive but 2-3 times slower than default search and ```-xsmall``` to generate a soft-masked assembly instead of hard-masked:
 
 ```
-# Repeat masking the contig assembly
-RepeatMasker contig_assembly.fa -lib argiope-families.fa -s -xsmall
-# Repeat masking the scaffolded assembly with the same library
 RepeatMasker scaffolded_genome.fa -lib argiope-families.fa -s -xsmall
 ```
 
 # Annotation
+
+Predicting protein-coding genes was done with AUGUSTUS <b id="f10">[10,11,12]</b> including extrinsic evidence in form of RNA-seq reads to genome alignments.
 
 ## Generating intron hints from RNA-Seq data
 
@@ -131,10 +130,22 @@ sequences. *Current Protocols in Bioinformatics*, 5(1):4-10.
 <b id="f6">[6]</b> Smit, A. F., Hubley, R., and Green, P. (2013-2015). RepeatMasker Open-4.0
 [http://www.repeatmasker.org].
 
-<b id="f7">[7]</b> 
+<b id="f7">[7]</b> Bao, Z. and Eddy, S. R. (2002). Automated de novo identification of repeat
+sequence families in sequenced genomes. *Genome Research*, 12(8):1269-1276.
 
-<b id="f8">[8]</b> 
+<b id="f8">[8]</b> Price, A. L., Jones, N. C., and Pevzner, P. A. (2005). *De novo* identification of
+repeat families in large genomes. *Bioinformatics*, 21(suppl 1):i351-i358.
 
-<b id="f9">[9]</b> 
+<b id="f9">[9]</b> Benson, G. (1999). Tandem repeats finder: a program to analyze DNA sequences.
+*Nucleic Acids Research*, 27(2):573-580.
 
-<b id="f10">[10]</b> 
+<b id="f10">[10]</b> Hoff, K. J. and Stanke, M. (2019). Predicting Genes in Single Genomes with
+AUGUSTUS. *Current Protocols in Bioinformatics*, 65(1):e57.
+
+<b id="f11">[11]</b> Stanke, M., Steinkamp, R., Waack, S., and Morgenstern, B. (2004).
+AUGUSTUS: a web server for gene finding in eukaryotes. *Nucleic Acids Research*,
+32(suppl 2):W309-W312.
+
+<b id="f12">[12]</b> Stanke, M., Tzvetkova, A., and Morgenstern, B. (2006). AUGUSTUS at EGASP:
+using EST, protein and genomic alignments for improved gene prediction in the
+human genome. *Genome Biology*, 7(1):S11.
