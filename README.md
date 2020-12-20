@@ -87,10 +87,50 @@ RepeatMasker scaffolded_genome.fa -lib argiope-families.fa -s -xsmall
 
 # Annotation
 
-Predicting protein-coding genes was done with AUGUSTUS <b id="f10">[10,11,12]</b> including extrinsic evidence in form of RNA-seq reads to genome alignments.
+Predicting protein-coding genes was done with AUGUSTUS (v. 3.3.2) <b id="f10">[10,11,12]</b> including extrinsic evidence in form of RNA-seq reads to genome alignments.
 
 ## Generating intron hints from RNA-Seq data
 
+To generate so called intron hints from RNA-seq data, which serve as extrinsic evidence for gene prediction, the first step was aligning RNA-seq reads to the genome assembly.
+This was done with HISAT2 (v. 2.1.0) <b id="f13">[13]</b>.
+
+```
+hisat2-build -p 12 genome.fa genome.index
+files =" eggs spiderlings adultMale adultFemale "
+for f in $files;
+  do
+  echo $f
+  hisat2 -p 12 -x genome.index -1 ${f}_1.fq -2 ${f}_2.fq -S ${f}.sam
+done
+
+# Convert sam files to intron hints
+for f in $files;
+  do
+  echo $f
+  samtools view -bS -o $f. bam ${f}.sam
+  samtools sort $f.bam -o $f.s.bam
+  samtools sort -n $f.s.bam -o $f.ss.bam
+  <AugustusDir>/auxprogs/bam2hints/bam2hints --intronsonly --in=$f.ss.bam --out=$f.intron.hints
+done
+
+# Filter hints
+for f in $files;
+  do
+  filterIntronsFindStrand.pl contig_genome.RMsoft.fa $f.intron.hints --score > $f.intron.f.score.hints
+done
+
+# Merge hints files
+for f in $files;
+  do
+  cat $f.intron.f.score.hints >> hintsfile.tmp.gff
+done
+
+# Sort hintsfile
+cat hintsfile.tmp.gff | sort -n -k 4,4 | sort -s -n -k 5,5 | sort -s -n -k 3,3 | sort -s -k 1,1 > hints.tmp.sort.gff
+
+# Join multiple hints
+perl join_mult_hints.pl < hints.tmp.sort.gff > hintsfile.gff
+```
 
 ## Running AUGUSTUS
 
@@ -149,3 +189,8 @@ AUGUSTUS: a web server for gene finding in eukaryotes. *Nucleic Acids Research*,
 <b id="f12">[12]</b> Stanke, M., Tzvetkova, A., and Morgenstern, B. (2006). AUGUSTUS at EGASP:
 using EST, protein and genomic alignments for improved gene prediction in the
 human genome. *Genome Biology*, 7(1):S11.
+
+<b id="f13">[13]</b> Kim, D., Paggi, J. M., Park, C., Bennett, C., and Salzberg, S. L. (2019). Graphbased
+genome alignment and genotyping with HISAT2 and HISAT-genotype. *Nature Biotechnology*, 37(8):907-915.
+
+<b id="f14">[14]</b>
