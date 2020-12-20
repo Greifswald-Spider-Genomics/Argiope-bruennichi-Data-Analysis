@@ -1,6 +1,8 @@
 # Argiope-bruennichi-Data-Analysis
 Documentation of Data Analysis in the Argiope bruennichi sequencing project
 
+An overview of the workflow used for assembling and annotating the genome of *Argiope bruennichi* is shown [here](workflow.pdf).
+
 # Contents
 
 - [Data](#data)
@@ -36,7 +38,7 @@ wtpoa -cns -t 30 -i argiope_wtdbg2.ctg.lay.gz -fo argiope_wtdbg2.ctg.fa
 
 ## Polishing using paired-end Illumina short-reads
 
-The first draft assembly was polished by applying three runs of Pilon <b id="f2">[2]</b> using 30X paired-end Illumina short-reads.
+The first draft assembly was polished by applying three runs of Pilon (v. 1.23) <b id="f2">[2]</b> using 30X paired-end Illumina short-reads.
 
 This was done by executing the following commands:
 ```
@@ -112,8 +114,9 @@ for f in $files;
   hisat2 -p 12 -x genome.index -1 ${f}_1.fq -2 ${f}_2.fq -S ${f}.sam
 done
 ```
-Where the option ```-x``` specifies the index file name prefix, ```-1``` and ```-2``` specify the paired end RNA-seq FASTQ files and ```-S``` specifies the name of the SAM output file.
+Where the option ```-x``` specifies the index file name prefix, ```-1``` and ```-2``` specify the paired end RNA-seq FASTQ files and ```-S``` specifies the name of the SAM output file. This resulted in four SAM files.
 
+Next, these SAM files were converted to intron hints, by first converting the SAM files to BAM files, then sorting the BAM files using SAMtools (v. 1.7) <b id="f14">[14]</b> and afterwards extracting the intron information from the sorted BAM files usin the AUGUSTUS auxiliary tool ```bam2hints```. 
 
 ```
 # Convert sam files to intron hints
@@ -125,7 +128,9 @@ for f in $files;
   samtools sort -n $f.s.bam -o $f.ss.bam
   <AugustusDir>/auxprogs/bam2hints/bam2hints --intronsonly --in=$f.ss.bam --out=$f.intron.hints
 done
+```
 
+```
 # Filter hints
 for f in $files;
   do
@@ -206,4 +211,6 @@ human genome. *Genome Biology*, 7(1):S11.
 <b id="f13">[13]</b> Kim, D., Paggi, J. M., Park, C., Bennett, C., and Salzberg, S. L. (2019). Graphbased
 genome alignment and genotyping with HISAT2 and HISAT-genotype. *Nature Biotechnology*, 37(8):907-915.
 
-<b id="f14">[14]</b>
+<b id="f14">[14]</b> Li, H., Handsaker, B., Wysoker, A., Fennell, T., Ruan, J., Homer, N., Marth,
+G., Abecasis, G., and Durbin, R. (2009). The sequence alignment/map format and
+SAMtools. *Bioinformatics*, 25(16):2078-2079.
