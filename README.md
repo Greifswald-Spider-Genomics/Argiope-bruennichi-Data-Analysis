@@ -94,15 +94,28 @@ Predicting protein-coding genes was done with AUGUSTUS (v. 3.3.2) <b id="f10">[1
 To generate so called intron hints from RNA-seq data, which serve as extrinsic evidence for gene prediction, the first step was aligning RNA-seq reads to the genome assembly. <br>
 This was done with HISAT2 (v. 2.1.0) <b id="f13">[13]</b>.
 
+First, the genome assembly was indexed using ```hisat2-build``` with the following command:
+
 ```
 hisat2-build -p 12 genome.fa genome.index
+```
+Where ```genome.index``` is the base of the HISAT2 index files.
+
+Then, all of the four RNA extractions (from eggs, a spiderling, an adult male and an adult female: eggs_1.fq, eggs_2.fq, spiderlings_1.fq, spiderlings_2.fq, 
+adultMale_1.fq, adultMale_2.fq, adultFemale_1.fq, adultFemale_2.fq) were aligned against the genome assembly by executing the following commands:
+
+```
 files =" eggs spiderlings adultMale adultFemale "
 for f in $files;
   do
   echo $f
   hisat2 -p 12 -x genome.index -1 ${f}_1.fq -2 ${f}_2.fq -S ${f}.sam
 done
+```
+Where the option ```-x``` specifies the index file name prefix, ```-1``` and ```-2``` specify the paired end RNA-seq FASTQ files and ```-S``` specifies the name of the SAM output file.
 
+
+```
 # Convert sam files to intron hints
 for f in $files;
   do
