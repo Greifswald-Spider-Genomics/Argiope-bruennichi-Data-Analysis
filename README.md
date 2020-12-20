@@ -103,8 +103,8 @@ hisat2-build -p 12 genome.fa genome.index
 ```
 Where ```genome.index``` is the base of the HISAT2 index files.
 
-Then, all of the four RNA extractions (from eggs, a spiderling, an adult male and an adult female: eggs_1.fq, eggs_2.fq, spiderlings_1.fq, spiderlings_2.fq, 
-adultMale_1.fq, adultMale_2.fq, adultFemale_1.fq, adultFemale_2.fq) were aligned against the genome assembly by executing the following commands:
+Then, all of the four RNA extractions (from eggs, a spiderling, an adult male and an adult female: ```eggs_1.fq, eggs_2.fq, spiderlings_1.fq, spiderlings_2.fq, 
+adultMale_1.fq, adultMale_2.fq, adultFemale_1.fq, adultFemale_2.fq```) were aligned against the genome assembly by executing the following commands:
 
 ```
 files =" eggs spiderlings adultMale adultFemale "
@@ -116,37 +116,43 @@ done
 ```
 Where the option ```-x``` specifies the index file name prefix, ```-1``` and ```-2``` specify the paired end RNA-seq FASTQ files and ```-S``` specifies the name of the SAM output file. This resulted in four SAM files.
 
-Next, these SAM files were converted to intron hints, by first converting the SAM files to BAM files, then sorting the BAM files using SAMtools (v. 1.7) <b id="f14">[14]</b> and afterwards extracting the intron information from the sorted BAM files usin the AUGUSTUS auxiliary tool ```bam2hints```. 
+Next, these SAM files were converted to intron hints, by first converting the SAM files to BAM files, then sorting the BAM files using SAMtools (v. 1.7) <b id="f14">[14]</b> and afterwards extracting the intron information from the sorted BAM files using the AUGUSTUS auxiliary tool ```bam2hints``` found in ```Augustus/auxprogs/bam2hints```. <br>
+This was done by executing the following commands:
 
 ```
-# Convert sam files to intron hints
 for f in $files;
   do
   echo $f
   samtools view -bS -o $f. bam ${f}.sam
   samtools sort $f.bam -o $f.s.bam
   samtools sort -n $f.s.bam -o $f.ss.bam
-  <AugustusDir>/auxprogs/bam2hints/bam2hints --intronsonly --in=$f.ss.bam --out=$f.intron.hints
+  bam2hints --intronsonly --in=$f.ss.bam --out=$f.intron.hints
 done
 ```
 
+Since for most RNA-seq data, it is unclear from which strand an aligned read stems, in the next step the correct strand was tried to be guessed from genomic splice site information and those reads without appropriate splice site information were filtered out using the BRAKER <b id="f15">[15]</b> script ```filterIntronsFindStrand.pl``` found in ```BRAKER/scripts``` with the option ```--score``` by executing the following command:
+
 ```
-# Filter hints
 for f in $files;
   do
-  filterIntronsFindStrand.pl contig_genome.RMsoft.fa $f.intron.hints --score > $f.intron.f.score.hints
+  filterIntronsFindStrand.pl genome.RMsoft.fa $f.intron.hints --score > $f.intron.f.score.hints
 done
-
-# Merge hints files
+```
+ Afterwards, the four generated hints files were merged into one file by executing the following command:
+```
 for f in $files;
   do
   cat $f.intron.f.score.hints >> hintsfile.tmp.gff
 done
+```
 
-# Sort hintsfile
+Then, the resulting hints file was sorted by executing:
+```
 cat hintsfile.tmp.gff | sort -n -k 4,4 | sort -s -n -k 5,5 | sort -s -n -k 3,3 | sort -s -k 1,1 > hints.tmp.sort.gff
-
-# Join multiple hints
+```
+Finally, the multiple hints were joined using the AUGUSTUS script ```join_mult_hints.pl``` that can be found in ```Augustus/scripts```.
+This was done by executing the following command:
+```
 perl join_mult_hints.pl < hints.tmp.sort.gff > hintsfile.gff
 ```
 
@@ -214,3 +220,6 @@ genome alignment and genotyping with HISAT2 and HISAT-genotype. *Nature Biotechn
 <b id="f14">[14]</b> Li, H., Handsaker, B., Wysoker, A., Fennell, T., Ruan, J., Homer, N., Marth,
 G., Abecasis, G., and Durbin, R. (2009). The sequence alignment/map format and
 SAMtools. *Bioinformatics*, 25(16):2078-2079.
+
+<b id="f15">[15]</b> Hoff, K. J., Lomsadze, A., Borodovsky, M., and Stanke, M. (2019). Whole-
+Genome Annotation with BRAKER. In *Gene Prediction*, pages 65{95. Springer.
