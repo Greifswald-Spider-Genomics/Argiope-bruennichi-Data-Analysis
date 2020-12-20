@@ -91,7 +91,7 @@ Predicting protein-coding genes was done with AUGUSTUS (v. 3.3.2) <b id="f10">[1
 
 ## Generating intron hints from RNA-Seq data
 
-To generate so called intron hints from RNA-seq data, which serve as extrinsic evidence for gene prediction, the first step was aligning RNA-seq reads to the genome assembly.
+To generate so called intron hints from RNA-seq data, which serve as extrinsic evidence for gene prediction, the first step was aligning RNA-seq reads to the genome assembly. <br>
 This was done with HISAT2 (v. 2.1.0) <b id="f13">[13]</b>.
 
 ```
