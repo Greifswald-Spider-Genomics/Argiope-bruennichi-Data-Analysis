@@ -130,7 +130,7 @@ for f in $files;
 done
 ```
 
-Since for most RNA-seq data, it is unclear from which strand an aligned read stems, in the next step the correct strand was tried to be guessed from genomic splice site information and those reads without appropriate splice site information were filtered out using the BRAKER <b id="f15">[15]</b> script ```filterIntronsFindStrand.pl``` found in ```BRAKER/scripts``` with the option ```--score``` by executing the following command:
+Since for most RNA-seq data, it is unclear from which strand an aligned read stems, in the next step the correct strand was tried to be guessed from genomic splice site information and those reads without appropriate splice site information were filtered out using the BRAKER <b id="f15">[15]</b> script ```filterIntronsFindStrand.pl``` found in ```BRAKER/scripts``` with the option ```--score``` (to set the score column to the 'mult' entry) by executing the following command:
 
 ```
 for f in $files;
@@ -158,11 +158,66 @@ perl join_mult_hints.pl < hints.tmp.sort.gff > hintsfile.gff
 
 ## Running AUGUSTUS
 
+Protein-coding genes were predicted for the soft-masked genome assembly using AUGUSTUS with the *Parasteatoda* parameter set. In order to speed up gene prediction, the genome and the hints file were split into smaller tasks to be executed in parallel. 
+This was done according to Support Protocol 9 of <b id="f10">[10]</b> using the following commands:
+
+```
+# Split the genome into smaller files
+mkdir split
+splitMfasta.pl genome.RMsoft.fa --outputpath=split --minsize=1000000
+
+# Determine the number of split genome files
+ls split/genome.RMsoft.split.*.fa | wc -l 
+# 37
+
+# Split hints file
+for ((i=1; i<=37; i++));
+  do
+  fgrep ">" split/genome.RMsoft.split.$i.fa | perl -pe 's/^>//' > part.$i.lst
+done
+mkdir split_hints
+for ((i=1; i<=37; i++));
+  do
+  cat hintsfile.gff | getLinesMatching.pl part.$i.lst 1 > split_hints/hints.split.$i.gff
+done
+```
+
+Having split the genome assembly and hints file into smaller parts, AUGUSTUS was run with the options ```--UTR=on``` to additionally predict untranslated regions (UTRs), ```--print_utr=on``` to print the predicted UTRs in the GFF output file, ```--species=parasteatoda``` to specifiy the used species parameters, ```--alternatives-from-evidence=true``` to report alternative transcripts when they are supported by hints, ```--hintsfile=split_hints/hints.split.{}.gff``` to specify the hints file, ```--extrinsicCfgFile=rnaseq.cfg``` to specify the file containing the list of used sources for the hints and their boni and mali (here, the default file used by BRAKER was used), ```--allow_hinted_splicesites=gcag,atac``` to allow AUGUSTUS to also predict those (rare) introns that start with GC and end with AG and those that start with AT and end with AC, ```--softmaskin=on``` to specify that the assembly is soft-masked, ```--codingseq=on``` to output the coding DNA sequences in the GFF output file and additionally produce a file augustus.codingseq with the complete coding sequences and ```--exonnames=on``` to, in addition to the exon-line in the GFF output file, print the same line again but with the exon name ('initial', 'internal', 'terminal' or 'single') instead of 'exon':
+
+```
+# Run AUGUSTUS
+seq 1 37 | parallel -j 8 --bar --no-notice " nice augustus \
+  --UTR=on --print_utr=on --species=parasteatoda \
+  --AUGUSTUS_CONFIG_PATH=/home/anica/Augustus-master/config \
+  --alternatives-from-evidence=true \
+  --hintsfile=split_hints/hints.split.{}.gff \
+  --extrinsicCfgFile=rnaseq.cfg \
+  --allow_hinted_splicesites=gcag,atac \
+  --softmasking=on --codingseq=on --exonnames=on \
+  split/genome.RMsoft.split.{}.fa \
+  > out/augustus.{}.out"
+```
+
+Then, the AUGUSTUS output files were merged using the AUGUSTUS script ```join_aug_pred.pl``` by executing the following commands:
+```
+# Merge the AUGUSTUS outputs
+for ((i=1; i<=37; i++));
+  do
+  cat out/augustus.$i.out | join_aug_pred.pl >> augustus.tmp.gff
+done
+
+join_aug_pred.pl < augustus.tmp.gff > augustus.gff
+```
 
 ## Converting the GFF output file to GTF format
 
+In the next step, the GFF output file was converted to GTF format using the AUGUSTUS script gtf2gff.pl by executing the following command:
+```
+cat augustus.gff | perl -ne 'if(m/\tAUGUSTUS\t/) { print $_ ;}' | perl gtf2gff.pl --printExon --out=augustus.gtf
+```
 
 ## Replacing genes with in-frame stop codon by newly predicted genes
+
 
 
 ## Extracting protein sequences of predicted genes
