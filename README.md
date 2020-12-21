@@ -218,13 +218,38 @@ cat augustus.gff | perl -ne 'if(m/\tAUGUSTUS\t/) { print $_ ;}' | perl gtf2gff.p
 
 ## Replacing genes with in-frame stop codon by newly predicted genes
 
+After that, additional AUGUSTUS scripts: ```getAnnoFastaFromJoinGenes.py``` and ```fix_in_frame_stop_codon_genes.py``` were used to find and replace predicted protein-coding genes containing an in-frame stop codon with newly predicted genes. This was done by executing the following commands:
 
+```
+getAnnoFastaFromJoingenes.py -g genome.RMsoft.fa -f augustus.gtf -o augustus
+# WARNING: The GTF file contained 339 gene(s) with internal Stop codons.
+
+fix_in_frame_stop_codon_genes.py -g genome.RMsoft.fa --gtf augustus.gtf -o augustus.hints -b bad_genes.lst
+-H hintsfile.gff -s parasteatoda -e rnaseq.cfg --UTR on --print_utr on --softmasking on --additional_aug_args
+" --allow_hinted_splicesites=gcag,atac --codingseq=on"
+```
 
 ## Extracting protein sequences of predicted genes
 
+Having prepared the final gene set, the next step was extracting protein sequences of the predicted protein-coding genes. This was done using the AUGUSTUS script ```getAnnoFastaFromJoinGenes.py``` with the following command:
+```
+getAnnoFastaFromJoingenes.py -g genome.RMsoft.fa -f augustus.hints.gtf -o augustus.hints
+```
 
 ## Running the functional annotation with InterProScan
 
+Finally, functional annotation was performed using InterProScan (v. 5.39-77.0) <b id="f16">[16]</b>.
+
+Before running InterProScan, the stars at the end of each entry in the protein FASTA file ```augustus.hints.aa``` had to be removed, because InterProScan does
+not accept sequences with the * character. This was done by executing the following command:
+```
+cat augustus.hints.aa | perl -pe 's/\*//;' > augustus.hints_no_stars.aa
+```
+Then, InterProScan was run on the modified FASTA file with the following command:
+
+```
+interproscan.sh -i augustus.hints_no_stars.aa -pa &> iprsc.log
+```
 
 # References
 
@@ -278,3 +303,9 @@ SAMtools. *Bioinformatics*, 25(16):2078-2079.
 
 <b id="f15">[15]</b> Hoff, K. J., Lomsadze, A., Borodovsky, M., and Stanke, M. (2019). Whole-
 Genome Annotation with BRAKER. In *Gene Prediction*, pages 65{95. Springer.
+
+<b id="f16">[16]</b> Jones P, Binns D, Chang HY, et al. InterProScan 5: 
+Genome-scale protein function classification. *Bioinformatics* 2014;30:1236–40.
+
+<b id="f17">[17]</b> Quevillon E, Silventoinen V, Pillai S, et al. InterProScan: Protein
+domains identifier. *Nucleic Acids Res* 2005;33:W116–20.
