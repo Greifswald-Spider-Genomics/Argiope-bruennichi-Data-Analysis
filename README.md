@@ -103,7 +103,7 @@ hisat2-build -p 12 genome.fa genome.index
 ```
 Where ```genome.index``` is the base of the HISAT2 index files.
 
-Then, all of the four RNA extractions (from eggs, a spiderling, an adult male and an adult female: ```eggs_1.fq, eggs_2.fq, spiderlings_1.fq, spiderlings_2.fq, 
+Then, all of the four RNA extractions (from eggs, spiderlings, an adult male and an adult female: ```eggs_1.fq, eggs_2.fq, spiderlings_1.fq, spiderlings_2.fq, 
 adultMale_1.fq, adultMale_2.fq, adultFemale_1.fq, adultFemale_2.fq```) were aligned against the genome assembly by executing the following commands:
 
 ```
