@@ -111,7 +111,7 @@ files =" eggs spiderlings adultMale adultFemale "
 for f in $files;
   do
   echo $f
-  hisat2 -p 12 -x genome.index -1 ${f}_1.fq -2 ${f}_2.fq -S ${f}.sam
+  hisat2 -p 12 -x genome.index -1 $f_1.fq -2 $f_2.fq -S $f.sam
 done
 ```
 Where the option ```-x``` specifies the index file name prefix, ```-1``` and ```-2``` specify the paired-end RNA-seq FASTQ files and ```-S``` specifies the name of the SAM output file. This resulted in four SAM files.
@@ -123,7 +123,7 @@ This was done by executing the following commands:
 for f in $files;
   do
   echo $f
-  samtools view -bS -o $f. bam ${f}.sam
+  samtools view -bS -o $f. bam $f.sam
   samtools sort $f.bam -o $f.s.bam
   samtools sort -n $f.s.bam -o $f.ss.bam
   bam2hints --intronsonly --in=$f.ss.bam --out=$f.intron.hints
