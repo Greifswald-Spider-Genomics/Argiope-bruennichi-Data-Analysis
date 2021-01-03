@@ -158,7 +158,8 @@ perl join_mult_hints.pl < hints.tmp.sort.gff > hintsfile.gff
 
 ## Running AUGUSTUS
 
-Protein-coding genes were predicted for the soft-masked genome assembly using AUGUSTUS with the *Parasteatoda* parameter set. In order to speed up gene prediction, the genome and the hints file were split into smaller tasks to be executed in parallel. 
+Protein-coding genes were predicted for the soft-masked genome assembly using AUGUSTUS with the *Parasteatoda* parameter set. <br>
+In order to speed up gene prediction, the genome and the hints file were split into smaller tasks to be executed in parallel. 
 This was done according to Support Protocol 9 of <b id="f10">[10]</b> using the following commands:
 
 ```
@@ -181,6 +182,7 @@ for ((i=1; i<=37; i++));
   cat hintsfile.gff | getLinesMatching.pl part.$i.lst 1 > split_hints/hints.split.$i.gff
 done
 ```
+```splitMfasta.pl``` and ```getLinesMatching.pl``` are AUGUSTUS scripts that can be found in ```Augustus/scripts```.
 
 Having split the genome assembly and hints file into smaller parts, AUGUSTUS was run with the options ```--UTR=on``` to additionally predict untranslated regions (UTRs), ```--print_utr=on``` to print the predicted UTRs in the GFF output file, ```--species=parasteatoda``` to specifiy the used species parameters, ```--alternatives-from-evidence=true``` to report alternative transcripts when they are supported by hints, ```--hintsfile=split_hints/hints.split.{}.gff``` to specify the hints file, ```--extrinsicCfgFile=rnaseq.cfg``` to specify the file containing the list of used sources for the hints and their boni and mali (here, the default file used by BRAKER was used), ```--allow_hinted_splicesites=gcag,atac``` to allow AUGUSTUS to also predict those (rare) introns that start with GC and end with AG and those that start with AT and end with AC, ```--softmaskin=on``` to specify that the assembly is soft-masked, ```--codingseq=on``` to output the coding DNA sequences in the GFF output file and additionally produce a file augustus.codingseq with the complete coding sequences and ```--exonnames=on``` to, in addition to the exon-line in the GFF output file, print the same line again but with the exon name ('initial', 'internal', 'terminal' or 'single') instead of 'exon':
 
@@ -188,7 +190,6 @@ Having split the genome assembly and hints file into smaller parts, AUGUSTUS was
 # Run AUGUSTUS
 seq 1 37 | parallel -j 8 --bar --no-notice " nice augustus \
   --UTR=on --print_utr=on --species=parasteatoda \
-  --AUGUSTUS_CONFIG_PATH=/home/anica/Augustus-master/config \
   --alternatives-from-evidence=true \
   --hintsfile=split_hints/hints.split.{}.gff \
   --extrinsicCfgFile=rnaseq.cfg \
@@ -211,7 +212,7 @@ join_aug_pred.pl < augustus.tmp.gff > augustus.gff
 
 ## Converting the GFF output file to GTF format
 
-In the next step, the GFF output file was converted to GTF format using the AUGUSTUS script gtf2gff.pl by executing the following command:
+In the next step, the GFF output file was converted to GTF format using the AUGUSTUS script ```gtf2gff.pl``` by executing the following command:
 ```
 cat augustus.gff | perl -ne 'if(m/\tAUGUSTUS\t/) { print $_ ;}' | perl gtf2gff.pl --printExon --out=augustus.gtf
 ```
@@ -222,7 +223,7 @@ After that, additional AUGUSTUS scripts: ```getAnnoFastaFromJoinGenes.py``` and 
 
 ```
 getAnnoFastaFromJoingenes.py -g genome.RMsoft.fa -f augustus.gtf -o augustus
-# WARNING: The GTF file contained 339 gene(s) with internal Stop codons.
+# WARNING: The GTF file contained 428 gene(s) with internal Stop codons.
 
 fix_in_frame_stop_codon_genes.py -g genome.RMsoft.fa --gtf augustus.gtf -o augustus.hints -b bad_genes.lst
 -H hintsfile.gff -s parasteatoda -e rnaseq.cfg --UTR on --print_utr on --softmasking on --additional_aug_args
@@ -238,10 +239,10 @@ getAnnoFastaFromJoingenes.py -g genome.RMsoft.fa -f augustus.hints.gtf -o august
 
 ## Running the functional annotation with InterProScan
 
-Finally, functional annotation was performed using InterProScan (v. 5.39-77.0) <b id="f16">[16]</b>.
+Finally, functional annotation was performed using InterProScan (v. 5.39-77.0) <b id="f16">[16,17]</b>.
 
-Before running InterProScan, the stars at the end of each entry in the protein FASTA file ```augustus.hints.aa``` had to be removed, because InterProScan does
-not accept sequences with the * character. This was done by executing the following command:
+Before running InterProScan, the stars (\*) at the end of each entry in the protein FASTA file ```augustus.hints.aa``` had to be removed, because InterProScan does
+not accept sequences with the \* character. This was done by executing the following command:
 ```
 cat augustus.hints.aa | perl -pe 's/\*//;' > augustus.hints_no_stars.aa
 ```
