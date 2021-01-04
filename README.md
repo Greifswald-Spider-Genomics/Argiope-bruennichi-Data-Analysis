@@ -33,8 +33,10 @@ This was done by executing the following commands:
 # Step 1a - assemble with wtdbg2
 wtdbg2 -x sq -t 30 -i pacbio_raw.fq -fo argiope_wtdbg2
 # Step 1b - derive consensus
-wtpoa -cns -t 30 -i argiope_wtdbg2.ctg.lay.gz -fo argiope_wtdbg2.ctg.fa
+wtpoa-cns -t 30 -i argiope_wtdbg2.ctg.lay.gz -fo argiope_wtdbg2.ctg.fa
 ```
+By the first command, wtdbg2 assembles the raw reads and generates the contig layout, where the option ```-x sq``` specifies the sequencing technology as being PacBio Sequel, ```-i``` specifies the raw sequencing reads and ```-fo``` specifies the prefix of the output files. By the second command, the consenser ```wtpoa-cns``` produces the final consensus in FASTA format, where the option ```-i``` specifies the raw sequencing reads and ```-fo``` specifies the name of output file.
+
 
 ## Polishing using paired-end Illumina short-reads
 
