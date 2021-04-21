@@ -3,7 +3,7 @@ Documentation of Data Analysis in the Argiope bruennichi sequencing project
 
 This git repository describes the steps used for assembling and annotating the genome of *Argiope bruennichi* as described in
 
-Sheffer, M.M.; Hoppe, A.; Krehenwinkel, H.; Uhl, G.; Kuss, A.W.; Jensen, L.; Jensen, C.; Gillespie, R.G.; Hoff, K. & Prost, S. (2021). Chromosome-level reference genome of the European wasp spider *Argiope bruennichi*: a resource for studies on range expansion and evolutionary adaptation. *GigaScience*, 10(1):giaa148. https://doi.org/10.1093/gigascience/giaa148
+Sheffer, M.M.; Hoppe, A.; Krehenwinkel, H.; Uhl, G.; Kuss, A.W.; Jensen, L.; Jensen, C.; Gillespie, R.G.; Hoff, K. & Prost, S. (2021). Chromosome-level reference genome of the European wasp spider *Argiope bruennichi*: a resource for studies on range expansion and evolutionary adaptation. *GigaScience*, 10(1):giaa148. doi: [10.1093/gigascience/giaa148](https://doi.org/10.1093/gigascience/giaa148)
 
 An overview of the workflow used for assembling and annotating the genome of *Argiope bruennichi* is shown [here](workflow.pdf).
 
