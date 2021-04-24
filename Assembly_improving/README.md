@@ -35,7 +35,7 @@ rm mapped-lg.bam
 echo -e "PE_data_R1.fq.gz\nPE_data_R2.fq.gz" > il_names.txt
 
 # Step 4 - Run HyPo
-hypo -r @il_names.txt -d argiope_bruennichi_HiRise.fasta -b mapped-sr_HiRise.sorted.bam -c 30 -s 1.7g -B mapped-lg_HiRise.sorted.bam -p 16 -t 8 -o argiope_bruennichi_HiRise_HyPo.fasta -i
+hypo -r @il_names.txt -d genome.fa -b mapped-sr.sorted.bam -c 30 -s 1.7g -B mapped-lg.sorted.bam -p 16 -t 8 -o genome_HyPo.fa -i
 ```
 
 ## Polishing with Pilon using Omni-C data
