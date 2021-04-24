@@ -16,7 +16,7 @@ An overview of the workflow used for improving the assembly of the genome of *Ar
 
 The previously published assembly was first improved by polishing with HyPo using paired-end Illumina short-reads and PacBio long-reads.
 
-This was done by executing the following command:
+This was done by executing the following commands:
 
 ```
 # Step 1 - Mapping the short-reads to scaffolds
@@ -41,3 +41,18 @@ hypo -r @il_names.txt -d genome.fa -b mapped-sr.s.bam -c 30 -s 1.7g -B mapped-lg
 ## Polishing with Pilon using Omni-C data
 
 The resulting assembly was polished again with Pilon using Omni-C data.
+
+This was done by executing the following commands:
+
+```
+# Step 1 - index reference
+bwa index -a bwtsw genome_HyPo.fa
+
+# Step 2a - map the Omni-C reads to the assembly FASTA file
+bwa mem -t 10 genome_HyPo.fa omnic_1.fq.gz omnic_2.fq.gz | samtools view -bS | samtools sort -o omnic.s.bam
+# Step 2b - index the mapped file
+samtools index omnic.s.bam
+
+# Step 2c - Polish the assembly with the OmniC data
+java -Xmx40G -jar pilon-1.23.jar --genome genome_HyPo.fa --frags omnic.s.bam --output genome_new
+```
