@@ -67,7 +67,7 @@ java -Xmx40G -jar pilon-1.23.jar --genome genome_HyPo.fa --frags omnic.s.bam --o
 | Total length (Gb) |1.67 | 1.67 | 1.67 | 
 |Number of Ns | 1,169,100 | 624,300 | 571,613 |
 |Number of gaps | 11,691 | 6,243 | 6,231 |
-|BUSCOs (%) | | | | 
+|BUSCOs (%) | <td colspan=3> | 
 |&emsp; Complete | 91.0 | 91.9 | 92.5 |
 |&emsp;&emsp; and single-copy | 87.6 | 88.6 | 89.3 |
 |&emsp;&emsp; and duplicated | 3.4 | 3.3 | 3.2 |
