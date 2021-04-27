@@ -2,13 +2,13 @@
 
 # Contens
 
-- [Aciniform spidroins](#aciniform)
-- [Aggregate spidroins](#aggregate)
-- [Flagelliform spidroins](#flagelliform)
-- [Major ampullate spidroins](#major_ampullate)
-- [Minor ampullate spidroins](#minor_ampullate)
-- [Pyriform spidroins](#pyriform)
-- [Tubuliform spidroins](#tubuliform)
+- [Aciniform spidroins](#aciniform-spidroins)
+- [Aggregate spidroins](#aggregate-spidroins)
+- [Flagelliform spidroins](#flagelliform-spidroins)
+- [Major ampullate spidroins](#major-ampullate-spidroins)
+- [Minor ampullate spidroins](#minor-ampullate-spidroins)
+- [Pyriform spidroins](#pyriform-spidroins)
+- [Tubuliform spidroins](#tubuliform-spidroins)
 
 # Aciniform spidroins
 
