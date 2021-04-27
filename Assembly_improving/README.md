@@ -67,7 +67,7 @@ Number of scaffolds |2,231 |2,231 |2,231
  Total length (Gb) |1.67 | 1.67 | 1.67 
 Number of Ns | 1,169,100 | 624,300 | 571,613 
 Number of gaps | 11,691 | 6,243 | 6,231 
-BUSCOs (%)  <td colspan=4>BUSCOs (%)  
+<td colspan=4>BUSCOs (%)  
 &emsp; Complete | 91.0 | 91.9 | 92.5 
 &emsp;&emsp; and single-copy | 87.6 | 88.6 | 89.3 
 &emsp;&emsp; and duplicated | 3.4 | 3.3 | 3.2 
