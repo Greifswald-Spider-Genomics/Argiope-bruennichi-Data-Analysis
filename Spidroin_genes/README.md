@@ -10,16 +10,16 @@
 - [Pyriform spidroins](#pyriform spidroin)
 - [Tubuliform spidroins](#tubuliform spidroin)
 
-## Aciniform spidroins
+# Aciniform spidroins
 
-## Aggregate spidroins
+# Aggregate spidroins
 
-## Flagelliform spidroins
+# Flagelliform spidroins
 
-## Major ampullate spidroins
+# Major ampullate spidroins
 
-## Minor ampullate spidroins
+# Minor ampullate spidroins
 
-## Pyriform spidroins
+# Pyriform spidroins
 
-## Tubuliform spidroins
+# Tubuliform spidroins
