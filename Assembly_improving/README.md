@@ -58,3 +58,18 @@ samtools index omnic.s.bam
 # Step 2c - Polish the assembly with the OmniC data
 java -Xmx40G -jar pilon-1.23.jar --genome genome_HyPo.fa --frags omnic.s.bam --output genome_new
 ```
+
+## Results of the polishing
+
+| Assembly | unpolished | polished with HyPo | polished with HyPo and Pilon |
+| :---     | ---:       | ---:               | ---:                         |
+|Number of scaffolds |2,231 |2,231 |2,231 | 
+| Total length (Gb) |1.67 | 1.67 | 1.67 | 
+|Number of Ns | 1,169,100 | 624,300 | 571,613 |
+|Number of gaps | 11,691 | 6,243 | 6,231 |
+|BUSCOs (%) | | | | 
+|Complete | 91.0 | 91.9 | 92.5 |
+| and single-copy | 87.6 | 88.6 | 89.3 |
+|and duplicated | 3.4 | 3.3 | 3.2 |
+| Fragmented | 2.8 | 2.3 | 2.1 |
+| Missing | 6.2 | 5.8 | 5.4 |
