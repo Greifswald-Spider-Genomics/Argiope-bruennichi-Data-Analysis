@@ -68,7 +68,7 @@ java -Xmx40G -jar pilon-1.23.jar --genome genome_HyPo.fa --frags omnic.s.bam --o
 |Number of Ns | 1,169,100 | 624,300 | 571,613 
 |Number of gaps | 11,691 | 6,243 | 6,231 
 |<td colspan=4>BUSCOs (%)  
-<&emsp; Complete | 91.0 | 91.9 | 92.5 
+|&emsp; Complete | 91.0 | 91.9 | 92.5 
 |&emsp;&emsp; and single-copy | 87.6 | 88.6 | 89.3 
 |&emsp;&emsp; and duplicated | 3.4 | 3.3 | 3.2 
 |&emsp; Fragmented | 2.8 | 2.3 | 2.1 
